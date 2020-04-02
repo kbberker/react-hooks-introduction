@@ -37,7 +37,7 @@ const App = props => {
         <button onClick={sideHandler.bind(this, 'light')}>
           Light Side
         </button>
-        <button onClick={sideHandler.bind(this, 'dark')}>Dark Side</button>
+        <button onClick={() => sideHandler('dark')}>Dark Side</button>
         {chosenSide === 'dark' && (
           <button onClick={destructionHandler}>DESTROY!</button>
         )}
