@@ -4,45 +4,47 @@ import CharPicker from './components/CharPicker';
 import Character from './components/Character';
 
 const App = props => {
-  const [state, setState] = useState({
-    selectedCharacter: 1,
-    side: 'light',
-    destroyed: false
-  })
+  // state doesn't need to be an object it can be whatever you want
+  const [chosenSide, setChosenSide] = useState('light');
 
-  sideHandler = side => {
-    this.setState({ side: side });
+  const [selectedCharacter, setSelectedCharacter] = useState('1');
+
+  const [destroyed, setDestroyed] = useState(false);
+
+  const sideHandler = side => {
+   setChosenSide(side);
   };
 
-  charSelectHandler = event => {
+  const charSelectHandler = event => {
     const charId = event.target.value;
-    this.setState({ selectedCharacter: charId });
+   setSelectedCharacter(charId);
   };
 
-  destructionHandler = () => {
-    this.setState({ destroyed: true });
+  const destructionHandler = () => {
+   setDestroyed(true);
   };
 
 
     let content = (
       <React.Fragment>
         <CharPicker
-          side={this.state.side}
-          selectedChar={this.state.selectedCharacter}
-          onCharSelect={this.charSelectHandler}
+          side={chosenSide}
+          selectedChar={selectedCharacter}
+          onCharSelect={charSelectHandler}
         />
-        <Character selectedChar={this.state.selectedCharacter} />
-        <button onClick={this.sideHandler.bind(this, 'light')}>
+        <Character selectedChar={selectedCharacter} />
+        {/* Apparently the "this" needs to stay here */}
+        <button onClick={sideHandler.bind(this, 'light')}>
           Light Side
         </button>
-        <button onClick={this.sideHandler.bind(this, 'dark')}>Dark Side</button>
-        {this.state.side === 'dark' && (
-          <button onClick={this.destructionHandler}>DESTROY!</button>
+        <button onClick={sideHandler.bind(this, 'dark')}>Dark Side</button>
+        {chosenSide === 'dark' && (
+          <button onClick={destructionHandler}>DESTROY!</button>
         )}
       </React.Fragment>
     );
 
-    if (this.state.destroyed) {
+    if (destroyed) {
       content = <h1>Total destruction!</h1>;
     }
     return content;
