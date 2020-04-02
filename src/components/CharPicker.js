@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './CharPicker.css';
 
 const CharPicker = props => {
-  // state = { characters: [], isLoading: false };
-
   const [loadedChars, setLoadedChars] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  componentDidMount() {
-    this.setState({ isLoading: true });
+  useEffect(() => {
+    console.log('use effect is run');
+    setIsLoading(true);
     fetch('https://swapi.co/api/people')
       .then(response => {
         if (!response.ok) {
@@ -19,19 +18,19 @@ const CharPicker = props => {
       })
       .then(charData => {
         const selectedCharacters = charData.results.slice(0, 5);
-        this.setState({
-          characters: selectedCharacters.map((char, index) => ({
-            name: char.name,
-            id: index + 1
-          })),
-          isLoading: false
-        });
+
+        setIsLoading(false);
+        setLoadedChars(
+          selectedCharacters.map((char, index) => ({
+          name: char.name,
+          id: index + 1
+        })))
       })
       .catch(err => {
         console.log(err);
+        setIsLoading(false);
       });
-  }
-
+  }, [])
 
     let content = <p>Loading characters...</p>;
 
