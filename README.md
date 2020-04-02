@@ -1,3 +1,5 @@
+This is the code for the [React.js Hooks Crash Course Youtube Tutorial by Academind](https://www.youtube.com/watch?v=-MlNBTSg_Ww)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
