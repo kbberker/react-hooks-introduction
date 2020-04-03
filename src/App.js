@@ -7,7 +7,7 @@ const App = props => {
   // state doesn't need to be an object it can be whatever you want
   const [chosenSide, setChosenSide] = useState('light');
 
-  const [selectedCharacter, setSelectedCharacter] = useState('1');
+  const [selectedCharacter, setSelectedCharacter] = useState(1);
 
   const [destroyed, setDestroyed] = useState(false);
 
