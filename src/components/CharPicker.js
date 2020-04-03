@@ -35,7 +35,7 @@ const CharPicker = props => {
     let content = <p>Loading characters...</p>;
 
     if (
-      isLoading &&
+      !isLoading &&
       loadedChars &&
       loadedChars.length > 0
     ) {
