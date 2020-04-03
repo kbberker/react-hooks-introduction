@@ -1,36 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useHTTP } from '../hooks/http';
 
 import './CharPicker.css';
 
 const CharPicker = props => {
-  const [loadedChars, setLoadedChars] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, fetchedData] = useHTTP('https://swapi.co/api/people', []);
+  const selectedCharacters = fetchedData.results.slice(0, 5);
 
-  useEffect(() => {
-    console.log('use effect is run');
-    setIsLoading(true);
-    fetch('https://swapi.co/api/people')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch.');
-        }
-        return response.json();
-      })
-      .then(charData => {
-        const selectedCharacters = charData.results.slice(0, 5);
-
-        setIsLoading(false);
-        setLoadedChars(
-          selectedCharacters.map((char, index) => ({
-          name: char.name,
-          id: index + 1
-        })))
-      })
-      .catch(err => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  }, [])
+  setIsLoading(false);
+  setLoadedChars(
+    selectedCharacters.map((char, index) => ({
+    name: char.name,
+    id: index + 1
+  })))
 
     let content = <p>Loading characters...</p>;
 
