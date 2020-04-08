@@ -1,55 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
+import { useHTTP } from '../hooks/http';
 import Summary from './Summary';
 
 const Character = props => {
 
-  console.log('Rendering...');
+  const [isLoading, fetchedData] = useHTTP(
+    'https://swapi.co/api/people/' + props.selectedChar + '/',
+    [props.selectedChar]
+  );
 
-  const [loadedCharacter, setLoadedCharacter] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  let loadedCharacter = null;
 
-  const fetchData = () => {
-    console.log(
-      'Sending Http request for new character with id ' +
-        props.selectedChar
-    );
-    setIsLoading(true);
-    fetch('https://swapi.co/api/people/' + props.selectedChar)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Could not fetch person!');
-        }
-        return response.json();
-      })
-      .then(charData => {
-        const loadedCharacter = {
-          id: props.selectedChar,
-          name: charData.name,
-          height: charData.height,
-          colors: {
-            hair: charData.hair_color,
-            skin: charData.skin_color
-          },
-          gender: charData.gender,
-          movieCount: charData.films.length
-        };
-        setLoadedCharacter(loadedCharacter);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    fetchData();
-    return () => console.log('Too soon')
-  }, [props.selectedChar])
+  if (fetchedData) {
+   loadedCharacter =
+    {
+      id: props.selectedChar,
+      name: fetchedData.name,
+      height: fetchedData.height,
+      colors: {
+        hair: fetchedData.hair_color,
+        skin: fetchedData.skin_color
+      },
+      gender: fetchedData.gender,
+      movieCount: fetchedData.films.length
+    };
+  }
 
     let content = <p>Loading Character...</p>;
 
-    if (!isLoading && loadedCharacter.id) {
+    if (!isLoading && loadedCharacter) {
       content = (
         <Summary
           name={loadedCharacter.name}
@@ -60,7 +40,7 @@ const Character = props => {
           movieCount={loadedCharacter.movieCount}
         />
       );
-    } else if (!isLoading && !loadedCharacter.id) {
+    } else if (!isLoading && !loadedCharacter) {
       content = <p>Failed to fetch character.</p>;
     }
     return content;
